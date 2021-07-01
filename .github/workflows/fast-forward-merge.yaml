@@ -1,0 +1,70 @@
+name: fast-forward-merge
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  fast-forward-merge:
+    runs-on: ubuntu-latest
+    # Only run this job when it's a comment in a pull request and the message is 'fast forward merge'
+    if: contains(github.event.comment.html_url, '/pull/') && contains(github.event.comment.body, 'fast forward merge')
+    steps:
+      - uses: hmarr/debug-action@v2
+
+      - uses: actions/github-script@v4
+        with:
+          script: |
+            console.log(context)
+            console.log(${{ toJSON(github) }})
+
+      - name: Gets the pull request
+        uses: actions/github-script@v4
+        id: get-pr
+        with:
+          script: |
+            const result = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            })
+
+            console.log()
+
+            return result.data
+
+      - name: Verify pull request checks
+        uses: actions/github-script@v4
+        env:
+          MERGEABLE: ${{ steps.get-pr.outputs.result.mergeable }}
+        with:
+          script: |
+            if (!process.env.MERGEABLE || process.env.MERGEABLE == "false") {
+              const erroMsg = "Pull request not ready to be merged";
+
+              github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `:x: ${erroMsg}`
+              })
+
+              core.setFailed(erroMsg);
+            }
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Fetch everything
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Merge
+        env:
+          GIT_BASE_BRANCH: ${{ steps.get-pr.outputs.result.base.ref }}
+          GIT_HEAD_BRANCH: ${{ steps.get-pr.outputs.result.head.ref }}
+        run: |
+          git checkout $GIT_BASE_BRANCH
+          git merge --ff-only $GIT_HEAD_BRANCH
+          git push $GIT_BASE_BRANCH
