@@ -30,7 +30,7 @@ jobs:
               pull_number: context.issue.number
             })
 
-            console.log()
+            console.log(result.data)
 
             return result.data
 
