@@ -67,8 +67,8 @@ jobs:
 
       - name: Merge
         env:
-          GIT_BASE_BRANCH: ${{ romJSON(steps.get-pr.outputs.result).base.ref }}
-          GIT_HEAD_BRANCH: ${{ romJSON(steps.get-pr.outputs.result).head.ref }}
+          GIT_BASE_BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).base.ref }}
+          GIT_HEAD_BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
         run: |
           git checkout $GIT_BASE_BRANCH
           git merge --ff-only $GIT_HEAD_BRANCH
