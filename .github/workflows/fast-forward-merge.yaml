@@ -24,15 +24,15 @@ jobs:
         id: get-pr
         with:
           script: |
-            const result = await github.pulls.get({
+            const pr = await github.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.issue.number
             })
 
-            console.log(result.data)
+            console.log(pr.data)
 
-            return result.data
+            return pr.data
 
       - name: Verify pull request checks
         uses: actions/github-script@v4
@@ -40,6 +40,8 @@ jobs:
           MERGEABLE: ${{ steps.get-pr.outputs.result.mergeable }}
         with:
           script: |
+            console.log(process.env.MERGEABLE)
+
             if (!process.env.MERGEABLE || process.env.MERGEABLE == "false") {
               const erroMsg = "Pull request not ready to be merged";
 
