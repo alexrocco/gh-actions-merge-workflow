@@ -41,6 +41,7 @@ jobs:
         with:
           script: |
             console.log(process.env.MERGEABLE)
+            console.log('${{ steps.get-pr.outputs.result.mergeable }}')
 
             if (!process.env.MERGEABLE || process.env.MERGEABLE == "false") {
               const erroMsg = "Pull request not ready to be merged";
