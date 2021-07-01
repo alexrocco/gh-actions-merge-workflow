@@ -74,4 +74,4 @@ jobs:
           
           git checkout $GIT_BASE_BRANCH
           git merge --ff-only origin/$GIT_HEAD_BRANCH
-          git push $GIT_BASE_BRANCH
+          git push origin $GIT_BASE_BRANCH
