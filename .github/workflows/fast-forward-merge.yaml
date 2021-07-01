@@ -71,5 +71,5 @@ jobs:
           GIT_HEAD_BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
         run: |
           git checkout $GIT_BASE_BRANCH
-          git merge --ff-only $GIT_HEAD_BRANCH
+          git merge --ff-only origin/$GIT_HEAD_BRANCH
           git push $GIT_BASE_BRANCH
