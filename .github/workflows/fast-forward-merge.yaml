@@ -54,12 +54,9 @@ jobs:
             const pullRequest = JSON.parse(process.env.PULL_REQUEST)
             const statusApi = JSON.parse(process.env.PR_STATUS_API_DATA)
 
-            console.log(pullRequest)
-            console.log(statusApi)
-
             // Check if the pull request is mergeable (git merge) and if the status API is success or pending with no statuses (no status to check, so it's 'valid')
             if (pullRequest.mergeable && (statusApi.state === 'success' || statusApi.state === 'pending' && statusApi.statuses.length == 0)) {
-              core.info(`:sunglasses: Pull request ${pullRequest.url} ready to be merged`)
+              core.info(`Pull request ${pullRequest.url} ready to be merged`)
             } else {
               const erroMsg = ":sleeping: Pull request not ready to be merged... ";
 
