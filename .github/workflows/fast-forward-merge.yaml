@@ -57,7 +57,7 @@ jobs:
             const prReviews = github.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: process.env.PULL_NUMBER,
+              pull_number: pullRequest.number,
             });
 
             const approvedReviews = prReviews.data.filter(prReview => prReviews.status == 'APPROVED');
