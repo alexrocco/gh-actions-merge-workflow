@@ -39,13 +39,8 @@ jobs:
         env:
           MERGEABLE: ${{ fromJSON(steps.get-pr.outputs.result).mergeable }}
           PULL_NUMBER: ${{ fromJSON(steps.get-pr.outputs.result).number }}
-          DATA: ${{ steps.get-pr.outputs.result }}
         with:
           script: |
-            console.log(process.env.MERGEABLE)
-            console.log(process.env.DATA)
-            console.log('${{ steps.get-pr.outputs.result.mergeable }}')
-
             const prReviews = github.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
