@@ -33,14 +33,27 @@ jobs:
             console.log(pr.data)
 
             return pr.data
+      
+      - name: Get pull request Status API
+        uses: octokit/request-action@v2.x
+        id: get-pr-status
+        with:
+          route: GET /repos/{repo}/commits/{ref}/status
+          repo: ${{ github.repository }}
+          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify pull request checks
         uses: actions/github-script@v4
         env:
           MERGEABLE: ${{ fromJSON(steps.get-pr.outputs.result).mergeable }}
           PULL_NUMBER: ${{ fromJSON(steps.get-pr.outputs.result).number }}
+          STATUS: ${{ fromJSON(steps.get-pr-status.outputs.data) }}
         with:
           script: |
+            console.log(process.env.STATUS)
+
             const prReviews = await github.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
