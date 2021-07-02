@@ -82,10 +82,11 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body: `:sleeping: ${erroMsg}`
-              }``
+              });
 
               core.setFailed(erroMsg);
             }
+
 
       - name: Checkout
         uses: actions/checkout@v2
