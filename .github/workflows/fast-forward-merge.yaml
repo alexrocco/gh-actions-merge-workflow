@@ -60,15 +60,15 @@ jobs:
               pull_number: pullRequest.number,
             });
 
-            const approvedReviews = prReviews.data.filter(prReview => prReviews.status == 'APPROVED');
-            const changesRequestedReviews = prReviews.data.filter(prReview => prReviews.status == 'CHANGES_REQUESTED');
+            const approvedReviews = prReviews.data.filter(prReview => prReview.status == 'APPROVED');
+            const changesRequestedReviews = prReviews.data.filter(prReview => prReview.status == 'CHANGES_REQUESTED');
 
             if (
               // Check if the branch can be merged by git
               pullRequest.mergeable &&
               // Check if the status checks is ok for the pull request
               (statusApi.state === 'success' || statusApi.state === 'pending' && statusApi.statuses.length == 0) &&
-              // Check If it's approved and there is no request for changes
+              // Check if it's approved and there is no request for changes
               (approvedReviews.length > 0 && changesRequestedReviews.length == 0)
             ) {
               core.info(`Pull request ${pullRequest.url} ready to be merged`)
