@@ -57,6 +57,11 @@ jobs:
             console.log(process.env.PR_STATUS_API_STATE)
             console.log(process.env.DATA)
 
+            const statusApi = process.env.DATA
+            console.log(statusApi.state)
+            console.log(statusApi.statuses.lenght)
+
+
             // If it's not mergeable, which means that the git branch cannot be marged to the base branch with no conflict or do not follows repositories policies
             if ((!process.env.PR_MERGEABLE || process.env.PR_MERGEABLE == "false") ||
             // Or if the status API state is not success or pending with no statuses (so no check for that pull request)
