@@ -47,14 +47,14 @@ jobs:
       - name: Verify pull request checks
         uses: actions/github-script@v4
         env:
-          MERGEABLE: ${{ fromJSON(steps.get-pr.outputs.result).mergeable }}
+          PR_MERGEABLE: ${{ fromJSON(steps.get-pr.outputs.result).mergeable }}
           PULL_NUMBER: ${{ fromJSON(steps.get-pr.outputs.result).number }}
           PR_STATUS_API_STATE: ${{ fromJSON(steps.get-pr-status-api.outputs.data).state  }}
         with:
           script: |
             console.log(process.env.PR_STATUS_API_STATE)
 
-            if ((!process.env.MERGEABLE || process.env.MERGEABLE == "false") || process.env.PR_STATUS_API_STATE != "success") {
+            if ((!process.env.PR_MERGEABLE || process.env.PR_MERGEABLE == "false") || process.env.PR_STATUS_API_STATE != "success") {
               const erroMsg = "Pull request not ready to be merged";
 
               github.issues.createComment({
