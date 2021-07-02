@@ -49,7 +49,7 @@ jobs:
         env:
           MERGEABLE: ${{ fromJSON(steps.get-pr.outputs.result).mergeable }}
           PULL_NUMBER: ${{ fromJSON(steps.get-pr.outputs.result).number }}
-          STATUS: ${{ fromJSON(steps.get-pr-status.outputs.data) }}
+          STATUS: ${{ steps.get-pr-status.outputs.data }}
         with:
           script: |
             console.log(process.env.STATUS)
