@@ -82,16 +82,17 @@ jobs:
           # Fetch everything
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ secrets.TEST }}
 
       - name: Merge
         env:
           GIT_BASE_BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).base.ref }}
           GIT_HEAD_BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
         run: |
-          mkdir -p ~/.ssh
-          echo '${{ secrets.TEST2 }}' > ~/.ssh/id_rsa
-          chmod 400 ~/.ssh/id_rsa
-          git remote set-url origin git@github.com:$GITHUB_REPOSITORY
+          # mkdir -p ~/.ssh
+          # echo '${{ secrets.TEST2 }}' > ~/.ssh/id_rsa
+          # chmod 400 ~/.ssh/id_rsa
+          # git remote set-url origin git@github.com:$GITHUB_REPOSITORY
           
           git checkout $GIT_BASE_BRANCH
           git merge --ff-only origin/$GIT_HEAD_BRANCH
