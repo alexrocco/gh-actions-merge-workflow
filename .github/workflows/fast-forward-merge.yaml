@@ -49,8 +49,8 @@ jobs:
 
             console.log(prReviews)  
 
-            const approvedReviews = prReviews.data.filter(prReview => prReviews.status == 'APPROVED');
-            const isApproved = prviews.data.lenght == approvedReviews.lenght
+            const approvedReviews = prReviews.data.filter(prReview => prReviews.state == 'APPROVED');
+            const isApproved = prReviews.data.lenght == approvedReviews.lenght && prReviews.data.lenght > 0
 
             if ((!process.env.MERGEABLE || process.env.MERGEABLE == "false") || !isApproved) {
               const erroMsg = "Pull request not ready to be merged";
