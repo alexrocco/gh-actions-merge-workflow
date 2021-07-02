@@ -62,8 +62,8 @@ jobs:
 
             console.log(prReviews.data)
 
-            const approvedReviews = prReviews.data.filter(prReview => prReview.status == 'APPROVED');
-            const changesRequestedReviews = prReviews.data.filter(prReview => prReview.status == 'CHANGES_REQUESTED');
+            const approvedReviews = prReviews.data.filter(prReview => prReview.state == 'APPROVED');
+            const changesRequestedReviews = prReviews.data.filter(prReview => prReview.state == 'CHANGES_REQUESTED');
 
             if (
               // Check if the branch can be merged by git
