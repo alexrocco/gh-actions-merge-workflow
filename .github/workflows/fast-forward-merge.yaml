@@ -57,7 +57,7 @@ jobs:
             console.log(process.env.PR_STATUS_API_STATE)
             console.log(process.env.DATA)
 
-            const statusApi = process.env.DATA
+            const statusApi = JSON.parse(process.env.DATA)
             console.log(statusApi.state)
             console.log(statusApi.statuses.lenght)
 
