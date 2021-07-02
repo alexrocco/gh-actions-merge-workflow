@@ -50,9 +50,11 @@ jobs:
           PR_MERGEABLE: ${{ fromJSON(steps.get-pr.outputs.result).mergeable }}
           PULL_NUMBER: ${{ fromJSON(steps.get-pr.outputs.result).number }}
           PR_STATUS_API_STATE: ${{ fromJSON(steps.get-pr-status-api.outputs.data).state  }}
+          DATA: ${{ fromJSON(steps.get-pr-status-api.outputs.data)  }}
         with:
           script: |
             console.log(process.env.PR_STATUS_API_STATE)
+            console.log(process.env.DATA)
 
             if ((!process.env.PR_MERGEABLE || process.env.PR_MERGEABLE == "false") || process.env.PR_STATUS_API_STATE != "success") {
               const erroMsg = "Pull request not ready to be merged";
