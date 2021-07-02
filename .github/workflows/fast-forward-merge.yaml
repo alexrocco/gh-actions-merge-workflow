@@ -54,8 +54,23 @@ jobs:
             const pullRequest = JSON.parse(process.env.PULL_REQUEST)
             const statusApi = JSON.parse(process.env.PR_STATUS_API_DATA)
 
-            // Check if the pull request is mergeable (git merge) and if the status API is success or pending with no statuses (no status to check, so it's 'valid')
-            if (pullRequest.mergeable && (statusApi.state === 'success' || statusApi.state === 'pending' && statusApi.statuses.length == 0)) {
+            const prReviews = github.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: process.env.PULL_NUMBER,
+            });
+
+            const approvedReviews = prReviews.data.filter(prReview => prReviews.status == 'APPROVED');
+            const changesRequestedReviews = prReviews.data.filter(prReview => prReviews.status == 'CHANGES_REQUESTED');
+
+            if (
+              // Check if the branch can be merged by git
+              pullRequest.mergeable &&
+              // Check if the status checks is ok for the pull request
+              (statusApi.state === 'success' || statusApi.state === 'pending' && statusApi.statuses.length == 0) &&
+              // Check If it's approved and there is no request for changes
+              (approvedReviews.length > 0 && changesRequestedReviews.length == 0)
+            ) {
               core.info(`Pull request ${pullRequest.url} ready to be merged`)
             } else {
               const erroMsg = ":sleeping: Pull request not ready to be merged... ";
