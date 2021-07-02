@@ -11,14 +11,6 @@ jobs:
     # Only run this job when it's a comment in a pull request and the message is 'fast forward merge'
     if: contains(github.event.comment.html_url, '/pull/') && contains(github.event.comment.body, 'fast forward merge')
     steps:
-      - uses: hmarr/debug-action@v2
-
-      - uses: actions/github-script@v4
-        with:
-          script: |
-            console.log(context)
-            console.log(${{ toJSON(github) }})
-
       - name: Gets the pull request
         uses: actions/github-script@v4
         id: get-pr
@@ -29,8 +21,6 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.issue.number
             })
-
-            console.log(pr.data)
 
             return pr.data
       
@@ -59,8 +49,6 @@ jobs:
               repo: context.repo.repo,
               pull_number: pullRequest.number,
             });
-
-            console.log(prReviews.data)
 
             const approvedReviews = prReviews.data.filter(prReview => prReview.state == 'APPROVED');
             const changesRequestedReviews = prReviews.data.filter(prReview => prReview.state == 'CHANGES_REQUESTED');

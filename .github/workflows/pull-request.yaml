@@ -1,0 +1,21 @@
+name: fast-forward-merge
+
+on:
+  pull_request:
+    types:
+      - synchronize # PR commits
+      - opened
+      - ready_for_review
+      - reopened
+      - closed
+
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v4
+        with:
+          script: |
+            console.log(context)
+            console.log(${{ github }})
+
