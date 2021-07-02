@@ -54,7 +54,7 @@ jobs:
             const pullRequest = JSON.parse(process.env.PULL_REQUEST)
             const statusApi = JSON.parse(process.env.PR_STATUS_API_DATA)
 
-            const prReviews = github.pulls.listReviews({
+            const prReviews = await github.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: pullRequest.number,
