@@ -38,6 +38,7 @@ jobs:
         uses: actions/github-script@v4
         env:
           MERGEABLE: ${{ fromJSON(steps.get-pr.outputs.result).mergeable }}
+          PULL_NUMBER: ${{ fromJSON(steps.get-pr.outputs.result).number }}
           DATA: ${{ steps.get-pr.outputs.result }}
         with:
           script: |
@@ -45,7 +46,18 @@ jobs:
             console.log(process.env.DATA)
             console.log('${{ steps.get-pr.outputs.result.mergeable }}')
 
-            if (!process.env.MERGEABLE || process.env.MERGEABLE == "false") {
+            const prReviews = github.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: process.env.PULL_NUMBER,
+            });
+
+            console.log(prReviews)  
+
+            const approvedReviews = prReviews.data.filter(prReview => prReviews.status == 'APPROVED');
+            const isApproved = prviews.data.lenght == approvedReviews.lenght
+
+            if ((!process.env.MERGEABLE || process.env.MERGEABLE == "false") || !isApproved) {
               const erroMsg = "Pull request not ready to be merged";
 
               github.issues.createComment({
