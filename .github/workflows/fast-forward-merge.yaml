@@ -41,7 +41,7 @@ jobs:
           PULL_NUMBER: ${{ fromJSON(steps.get-pr.outputs.result).number }}
         with:
           script: |
-            const prReviews = github.pulls.listReviews({
+            const prReviews = await github.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: process.env.PULL_NUMBER,
