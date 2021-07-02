@@ -17,5 +17,5 @@ jobs:
         with:
           script: |
             console.log(context)
-            console.log(${{ github }})
+            console.log(${{ toJSON(github) }})
 
