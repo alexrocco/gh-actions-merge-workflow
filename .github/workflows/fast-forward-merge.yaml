@@ -90,6 +90,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo '${{ secrets.TEST2 }}' > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
           git remote set-url origin git@github.com:$GITHUB_REPOSITORY
           
           git checkout $GIT_BASE_BRANCH
