@@ -49,22 +49,19 @@ jobs:
         env:
           PR_MERGEABLE: ${{ fromJSON(steps.get-pr.outputs.result).mergeable }}
           PULL_NUMBER: ${{ fromJSON(steps.get-pr.outputs.result).number }}
-          PR_STATUS_API_STATE: ${{ fromJSON(steps.get-pr-status-api.outputs.data).state }}
-          PR_STATUS_API_STATUSES_LENGHT: ${{ fromJSON(steps.get-pr-status-api.outputs.data).statuses.lenght }}
-          DATA: ${{ steps.get-pr-status-api.outputs.data  }}
+          PR_STATUS_API_DATA: ${{ steps.get-pr-status-api.outputs.data  }}
         with:
           script: |            
-            const statusApi = JSON.parse(process.env.DATA)
+            const statusApi = JSON.parse(process.env.PR_STATUS_API_DATA)
 
             console.log(statusApi)
             console.log(statusApi.state)
-            console.log(statusApi.statuses.lenght)
-
+            console.log(statusApi.statuses.length)
 
             // If it's not mergeable, which means that the git branch cannot be marged to the base branch with no conflict or do not follows repositories policies
             if ((!process.env.PR_MERGEABLE || process.env.PR_MERGEABLE == "false") ||
             // Or if the status API state is not success or pending with no statuses (so no check for that pull request)
-            ((process.env.PR_STATUS_API_STATE == "pending" && parseInt(process.env.PR_STATUS_API_STATUSES_LENGHT) > 0 ) || process.env.PR_STATUS_API_STATE != "success")) {
+            ((statusApi.state == "pending" && statusApi.statuses.length > 0 ) || statusApi.state != "success")) {
               const erroMsg = "Pull request not ready to be merged";
 
               github.issues.createComment({
