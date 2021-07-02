@@ -75,14 +75,14 @@ jobs:
             ) {
               core.info(`Pull request ${pullRequest.url} ready to be merged`)
             } else {
-              const erroMsg = ":sleeping: Pull request not ready to be merged... ";
+              const erroMsg = "Pull request not ready to be merged... ";
 
               github.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: erroMsg
-              })
+                body: `:sleeping: ${erroMsg}`
+              }``
 
               core.setFailed(erroMsg);
             }
