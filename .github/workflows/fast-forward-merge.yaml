@@ -60,6 +60,8 @@ jobs:
               pull_number: pullRequest.number,
             });
 
+            console.log(prReviews.data)
+
             const approvedReviews = prReviews.data.filter(prReview => prReview.status == 'APPROVED');
             const changesRequestedReviews = prReviews.data.filter(prReview => prReview.status == 'CHANGES_REQUESTED');
 
