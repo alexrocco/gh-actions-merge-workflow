@@ -53,11 +53,10 @@ jobs:
           PR_STATUS_API_STATUSES_LENGHT: ${{ fromJSON(steps.get-pr-status-api.outputs.data).statuses.lenght }}
           DATA: ${{ steps.get-pr-status-api.outputs.data  }}
         with:
-          script: |
-            console.log(process.env.PR_STATUS_API_STATE)
-            console.log(process.env.DATA)
-
+          script: |            
             const statusApi = JSON.parse(process.env.DATA)
+
+            console.log(statusApi)
             console.log(statusApi.state)
             console.log(statusApi.statuses.lenght)
 
