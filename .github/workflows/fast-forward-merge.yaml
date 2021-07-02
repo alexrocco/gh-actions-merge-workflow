@@ -36,7 +36,7 @@ jobs:
       
       - name: Get pull request Status API
         uses: octokit/request-action@v2.x
-        id: get-pr-status
+        id: get-pr-status-api
         with:
           route: GET /repos/{repo}/commits/{ref}/status
           repo: ${{ github.repository }}
@@ -49,23 +49,12 @@ jobs:
         env:
           MERGEABLE: ${{ fromJSON(steps.get-pr.outputs.result).mergeable }}
           PULL_NUMBER: ${{ fromJSON(steps.get-pr.outputs.result).number }}
-          STATUS: ${{ steps.get-pr-status.outputs.data }}
+          PR_STATUS_API_STATE: ${{ fromJSON(steps.gget-pr-status-api.outputs.data).state  }}
         with:
           script: |
-            console.log(process.env.STATUS)
+            console.log(process.env.PR_STATUS_API_STATE)
 
-            const prReviews = await github.pulls.listReviews({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: process.env.PULL_NUMBER,
-            });
-
-            console.log(prReviews)  
-
-            const approvedReviews = prReviews.data.filter(prReview => prReviews.state == 'APPROVED');
-            const isApproved = prReviews.data.lenght == approvedReviews.lenght && prReviews.data.lenght > 0
-
-            if ((!process.env.MERGEABLE || process.env.MERGEABLE == "false") || !isApproved) {
+            if ((!process.env.MERGEABLE || process.env.MERGEABLE == "false") || process.env.PR_STATUS_API_STATE == "success") {
               const erroMsg = "Pull request not ready to be merged";
 
               github.issues.createComment({
