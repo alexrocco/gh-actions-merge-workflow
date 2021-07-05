@@ -33,9 +33,9 @@ jobs:
         with:
           script: |
             if (process.env.GIT_HEAD_BRANCH == "test-20" && process.env.GIT_BASE_BRANCH == "test-1") {
-              core.setOutput("is_valid", ${{ toJSON(true) }});
+              core.setOutput("is_valid", true);
             } else {
-              core.setOutput("is_valid", ${{ toJSON(false) }});
+              core.setOutput("is_valid", false);
             }
       
       - name: Get pull request Status API
