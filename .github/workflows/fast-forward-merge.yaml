@@ -39,6 +39,7 @@ jobs:
             }
       
       - name: Get pull request Status API
+        if: fromJSON(steps.check-branches.outputs.is_valid)
         uses: octokit/request-action@v2.x
         id: get-pr-status-api
         with:
@@ -49,6 +50,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify pull request checks
+        if: fromJSON(steps.check-branches.outputs.is_valid)
         uses: actions/github-script@v4
         env:
           PULL_REQUEST: ${{ steps.get-pr.outputs.result }}
@@ -92,6 +94,7 @@ jobs:
             }
 
       - name: Checkout
+        if: fromJSON(steps.check-branches.outputs.is_valid)
         uses: actions/checkout@v2
         with:
           # Fetch everything
@@ -100,6 +103,7 @@ jobs:
           token: ${{ secrets.TEST }}
 
       - name: Merge
+        if: fromJSON(steps.check-branches.outputs.is_valid)
         env:
           GIT_BASE_BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).base.ref }}
           GIT_HEAD_BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
