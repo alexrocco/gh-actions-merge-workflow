@@ -24,6 +24,20 @@ jobs:
 
             return pr.data
       
+      - name: Check head and base branches
+        uses: actions/github-script@v4
+        id: check-branches
+        env:
+          GIT_HEAD_BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
+          GIT_BASE_BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).base.ref }}
+        with:
+          script: |
+            if (process.env.GIT_HEAD_BRANCH == "test-20" && process.env.GIT_BASE_BRANCH == "test-1") {
+              core.setOutput("is_valid", ${{ toJSON(true) }});
+            } else {
+              core.setOutput("is_valid", ${{ toJSON(false) }});
+            }
+      
       - name: Get pull request Status API
         uses: octokit/request-action@v2.x
         id: get-pr-status-api
